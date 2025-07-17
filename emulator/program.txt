@@ -1,0 +1,13 @@
+start:
+    addi x1, x0, 5        # multiplicand = 5
+    addi x2, x0, 7        # multiplier = 7
+    addi x3, x0, 0        # result = 0
+
+loop:
+    beq x2, x0, done      # if multiplier == 0, jump to done
+    add x3, x3, x1        
+    addi x2, x2, -1       # multiplier -= 1
+    jal x0, loop          
+
+done:
+    sw x3, 100(x0) # this is a comment
