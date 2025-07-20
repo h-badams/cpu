@@ -10,4 +10,4 @@ loop:
     jal x0, loop          
 
 done:
-    sw x3, 100(x0) # this is a comment
+    # sw x3, 100(x0) # this is a comment
