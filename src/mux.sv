@@ -4,32 +4,36 @@
 
 // 2:1 mux
 
-module mux2_1 (in, select, out);
+module mux2_1 (in0, in1, select, out);
 
-    input logic [1:0] in;
+    input logic [31:0] in0;
+    input logic [31:0] in1;
     input logic select;
-    output logic out;
+    output logic [31:0] out;
 
     always_comb begin
-        if (select) out = in[1];
-        else out = in[0];
+        if (select) out = in1;
+        else out = in0;
     end
 
 endmodule
 
 // 4:1 mux
 
-module mux4_1 (in, select, out);
+module mux4_1 (in0, in1, in2, in3, select, out);
 
-    input logic [3:0] in;
+    input logic [31:0] in0;
+    input logic [31:0] in1;
+    input logic [31:0] in2;
+    input logic [31:0] in3;
     input logic [1:0] select;
-    output logic out;
+    output logic [31:0] out;
 
-    logic out0, out1;
+    logic [31:0] out0, out1;
 
-    mux2_1 mux0 (.in({in[1], in[0]}), .select(select[0]), .out(out0)); // TODO check if the order is wrong in modelsim
-    mux2_1 mux1 (.in({in[3], in[2]}), .select(select[0]), .out(out1));
-    mux2_1 mux2 (.in({out0, out1}), .select(select[1]), .out(out));
+    mux2_1 mux0 (.in0(in1), .in1(in0), .select(select[0]), .out(out0)); // TODO check if the order is wrong in modelsim
+    mux2_1 mux1 (.in0(in3), .in1(in2), .select(select[0]), .out(out1));
+    mux2_1 mux2 (.in0(out0), .in1(out1), .select(select[1]), .out(out));
 
 endmodule
 

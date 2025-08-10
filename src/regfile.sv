@@ -1,38 +1,30 @@
 // regfile
 
 module regfile(
-    input logic clk;
-    input logic reset;
+    input logic clk,
 
-    input logic write_enable;
-    input logic [4:0] write_addr;
-    input logic [31:0] write_data;
+    input logic we3, // write enable
+    input logic [4:0] wa3, // write address
+    input logic [31:0] wd3, // write data
 
-    input logic [4:0] read_addr1;
-    input logic [4:0] read_addr2;
-    output logic [31:0] read_data1;
-    output logic [31:0] read_data2;
+    input logic [4:0] ra1, // read address 1
+    input logic [4:0] ra2, // read address 2
+    output logic [31:0] rd1, // read data 1
+    output logic [31:0] rd2 // read data 2
 );
 
     logic [31:0] registers [0:31];
 
     always_ff @(posedge clk) begin
-        // reset logic
-        if (reset) begin
-            for (int i = 0; i < 32; i++) begin
-                registers[i] <= 32'b0;
-            end
-        end
         // write logic
-        if (write_enable && write_addr != 5'b0) begin
-            registers[write_addr] <= write_data;
+        if (we3 && wa3 != 5'b0) begin
+            registers[wa3] <= wd3;
         end
-
     end
 
     always_comb begin
-        read_data1 = registers[read_addr1];
-        read_data2 = registers[read_addr2];
+        rd1 = registers[ra1];
+        rd2 = registers[ra2];
     end
 
 endmodule
