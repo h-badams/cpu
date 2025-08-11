@@ -1,0 +1,56 @@
+# ========================
+# Global Ignores
+# ========================
+*.log
+*.jou
+*.tmp
+*.bak
+*.bak*
+*~
+
+# ========================
+# Quartus-Specific Ignores
+# ========================
+/quartus/db/
+/quartus/incremental_db/
+/quartus/output_files/
+/quartus/*.rpt
+/quartus/*.qws
+/quartus/*.smsg
+/quartus/*.bak*
+/quartus/*.chg
+/quartus/*.pof
+/quartus/*.sof
+/quartus/*.sdf
+/quartus/*.jam
+/quartus/*.jic
+/quartus/*.summary
+/quartus/*.pin
+/quartus/*.qdf
+/quartus/*.json
+
+# ========================
+# Simulation Outputs
+# ========================
+/sim/modelsim/work/
+/sim/*.wlf
+/sim/modelsim/transcript
+/sim/modelsim/vsim.wlf
+/sim/modelsim.ini
+/sim/*.log
+/sim/*.vcd
+/sim/*.vpd
+/sim/*.svf
+/sim/modelsim/rtl_work
+
+*.ini
+msim_transcript
+
+# ========================
+# IDE / OS Misc / python
+# ========================
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+__pycache__
