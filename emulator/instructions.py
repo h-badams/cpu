@@ -1,5 +1,7 @@
 # TODO: comment
 
+import numpy as np
+
 instruction_table = {}
 
 def register_instr(name):
@@ -117,9 +119,67 @@ def instr_sltiu(args, state):
     else:
         state['registers'][rd] = 0
         
-# TODO: load instructions
+@register_instr('lb')
+def instr_lb(args, state):
+    rd, rs1, imm = args
+    addr = state['registers'][rs1] + imm
+    state['registers'][rd] = sign_ext(state['memory'][addr], 8)
 
-# TODO: S type instructions   
+@register_instr('lh')
+def instr_lh(args, state):
+    rd, rs1, imm = args
+    addr = state['registers'][rs1] + imm
+    halfword = state['memory'][addr:addr+2].view('<u2')[0]
+    state['registers'][rd] = sign_ext(halfword, 16)
+    
+@register_instr('lw')
+def instr_lw(args, state):
+    rd, rs1, imm = args
+    addr = state['registers'][rs1] + imm
+    word = state['memory'][addr:addr+4].view('<u4')[0]
+    state['registers'][rd] = word
+    
+@register_instr('lbu')
+def instr_lbu(args, state):
+    rd, rs1, imm = args
+    addr = state['registers'][rs1] + imm
+    state['registers'][rd] = zero_ext(state['memory'][addr])
+
+@register_instr('lhu')
+def instr_lhu(args, state):
+    rd, rs1, imm = args
+    addr = state['registers'][rs1] + imm
+    halfword = state['memory'][addr:addr+2].view('<u2')[0]
+    state['registers'][rd] = zero_ext(halfword)
+    
+@register_instr('jalr') # TODO: review
+def instr_jalr(args, state):
+    rd, rs1, imm = args
+    temp = state['pc'] + 4
+    state['pc'] = (state['registers'][rs1] + imm) & ~1
+    state['registers'][rd] = temp
+
+# S type instructions  TODO: fix sh and sw
+@register_instr('sb')
+def instr_sb(args, state):
+    rs1, rs2, imm = args
+    addr = state['registers'][rs1] + imm
+    state['memory'][addr] = (state['registers'][rs2] & 0xFF).astype(np.uint8)
+
+@register_instr('sh')
+def instr_sh(args, state):
+    rs1, rs2, imm = args
+    addr = state['registers'][rs1] + imm
+    val = state['registers'][rs2] & 0xFFFF
+    val_array = np.array([val], dtype='<u2')
+    state['memory'][addr:addr+2] = val_array.tobytes()
+
+@register_instr('sw')
+def instr_sw(args, state):
+    rs1, rs2, imm = args
+    addr = state['registers'][rs1] + imm
+    val = state['registers'][rs2]
+    state['memory'][addr:addr+4] = np.frombuffer(val.to_bytes(4, byteorder='little'), dtype=np.uint8)
 
 # J type instructions
 
@@ -183,8 +243,18 @@ def instr_auipc(args, state):
 
 def signed(num):
     return num if num < 2**32 else num - 2**33
-    
 
-   
+def sign_ext(value, k):
+    """
+    Sign extends a k bit number to 32 bits
+    """
+    value = int(value)
+    extended = value if value < (1 << (k - 1)) else value - (1 << k)
+    return np.uint32(extended)
 
-    
+def zero_ext(value):
+    """
+    Zero extends number to 32 bits
+    """
+    value = int(value)
+    return np.uint32(value)

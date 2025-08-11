@@ -217,6 +217,6 @@ def parse_u_type(instr):
 
 def sign_ext(value, k):
     '''
-    Sign a k bit number extends to 32 bits
+    Sign extends a k bit number to 32 bits
     '''
     return value if value < (1 << (k - 1)) else value - (1 << k)
