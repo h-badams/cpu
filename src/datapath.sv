@@ -43,7 +43,7 @@ module datapath (
 
     mux2_1 pc_next_mux (.in0(pc_plus4), .in1(pc_target), .select(pc_src), .out(pc_next));
 
-    regfile regfile (.clk(clk), .we3(reg_write), .ra1(instr[19:15]), .ra2(instr[24:20]),
+    regfile regfile (.clk(clk), .reset(reset), .we3(reg_write), .ra1(instr[19:15]), .ra2(instr[24:20]),
                     .wa3(instr[11:7]), .wd3(result), .rd1(rd1), .rd2(rd2)
     );
 

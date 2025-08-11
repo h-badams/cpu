@@ -1,7 +1,7 @@
 // regfile
 
 module regfile(
-    input logic clk,
+    input logic clk, reset,
 
     input logic we3, // write enable
     input logic [4:0] wa3, // write address
@@ -13,11 +13,14 @@ module regfile(
     output logic [31:0] rd2 // read data 2
 );
 
-    logic [31:0] registers [0:31];
+    logic [31:0] registers [31:0];
 
     always_ff @(posedge clk) begin
-        // write logic
-        if (we3 && wa3 != 5'b0) begin
+        if (reset) begin
+            for (int i = 0; i < 32; i++) begin
+                registers[i] <= 32'b0;
+            end
+        end else if (we3 && wa3 != 5'b0) begin
             registers[wa3] <= wd3;
         end
     end

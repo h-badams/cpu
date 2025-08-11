@@ -20,13 +20,9 @@ module alu (
             end
             default: result = 32'b0;
         endcase
-    end
 
-    always_comb begin
         if (result == 32'b0) zero = 1'b1;
         else zero = 1'b0;
     end
 
 endmodule
-
-
